@@ -48,7 +48,7 @@ def like_ajax(request):
     post.save()
     
     
-    return JsonResponse({'id':post_id})
+    return JsonResponse({"id":post_id})
 
 @csrf_exempt
 def comment_create(request):
@@ -62,7 +62,7 @@ def comment_create(request):
     
     post.save()
     
-    return JsonResponse({'id':post_id, "comment":post_comment})
+    return JsonResponse({"id":post_id, "comment":post_comment})
     
 
 @csrf_exempt
@@ -75,4 +75,4 @@ def comment_delete(request):
     post.comment=''
     post.save()
     
-    return JsonResponse({'id':post_id})
+    return JsonResponse({"id":post_id})

@@ -22,7 +22,7 @@
                 </table> {% endcomment %}
                 <br>
                 <textarea class="post_comment_insert"></textarea>
-                <button class="submit" onclick="onClickCommentSave({{post.id}},'')">🚀</button>
+                <button class="submit" onclick="onClickCommentSave({{post.id}})">🚀</button>
                 <br>
             
             </div>
@@ -55,12 +55,10 @@
                 const {id}=JSON.parse(requestLike.response);
                 const element=document.querySelector(`.post_id_${id} .post_like`);
                 const originHTML=element.innerHTML;
-                console.log(originHTML)
-
+                
                 const [logo, num]=originHTML.split(" ");
                 const count=Number(num)+1;
-                console.log(count);
-
+                
                 element.innerHTML=`${logo} ${count}`;
             }
         }
@@ -68,7 +66,7 @@
 
     // 댓글 추가
     const requestCommentCreate=new XMLHttpRequest();
-    const onClickCommentSave=(id,comment)=>{
+    const onClickCommentSave=(id)=>{
         const url='/comment_create';
         var comment=document.querySelector(`.post_id_${id} .post_comment_insert`).value;
         requestCommentCreate.open('POST',url,true)
