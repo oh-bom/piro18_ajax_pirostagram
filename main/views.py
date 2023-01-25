@@ -62,7 +62,7 @@ def comment_create(request):
     
     post.save()
     
-    return JsonResponse({"id":post_id, "comment":post_comment})
+    return JsonResponse({"id":post_id,"comment":post_comment})
     
 
 @csrf_exempt

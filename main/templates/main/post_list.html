@@ -13,18 +13,21 @@
                     <div class="post_comment">🐬{{post.comment}}</div>
                     <button class="post_content_delete" onclick="onClickCommentDelete({{post.id}})">✖</button>
                 </div>
-                {% comment %} <table>
-                    <tbody class="post_comment">
+
+                {% comment %} <table class="table">
+                    <tbody class="body">
                         <tr>
                             <td>🐬{{post.comment}}</td>
                         </tr>
                     </tbody> 
                 </table> {% endcomment %}
+
                 <br>
                 <textarea class="post_comment_insert"></textarea>
                 <button class="submit" onclick="onClickCommentSave({{post.id}})">🚀</button>
                 <br>
-            
+                ------------------------------
+                <br>
             </div>
         {% endfor %}
     </div>
@@ -44,7 +47,7 @@
         requestLike.open("POST",url,true)
         requestLike.setRequestHeader(
             'Content-Type',
-            'applicaton/x-www-form-urlencoded'
+            'application/x-www-form-urlencoded'
         );
         requestLike.send(JSON.stringify({id:id}));
     };
@@ -66,31 +69,32 @@
 
     // 댓글 추가
     const requestCommentCreate=new XMLHttpRequest();
+
     const onClickCommentSave=(id)=>{
         const url='/comment_create';
         var comment=document.querySelector(`.post_id_${id} .post_comment_insert`).value;
         requestCommentCreate.open('POST',url,true)
         requestCommentCreate.setRequestHeader(
-            'Content-Type',
-            'applicaton/x-www-form-urlencoded'
+            "Content-Type",
+            "application/x-www-form-urlencoded"
         );
         requestCommentCreate.send(JSON.stringify({id:id,comment:comment}));
     };
 
     requestCommentCreate.onreadystatechange=()=>{
-        if(requestLike.readyState===XMLHttpRequest.DONE){
+        if(requestCommentCreate.readyState===XMLHttpRequest.DONE){
             if(requestCommentCreate.status<400){
                 const {id,comment}=JSON.parse(requestCommentCreate.response);
                 let element=document.querySelector(`.post_id_${id} .post_comment`);
                 
                 element.innerHTML="👻 "+`${comment}`;
                 
-                /*let tr=document.createElement("tr");
-                let newComment=document.createElement('td');
-                newComment.innerHTML=`${comment}`;
-                tr.append(newComment);
-                console.log(newComment);
-                comment_list.append(newComment);*/
+                /*let table=document.querySelector(`.body`);
+                let tr=document.createElement("tr");
+                let str=`<td>👻 ${comment}</td>`;
+                tr.innerHTML=str;
+                table.append(tr);*/
+                
             }
         }
     };
@@ -118,8 +122,6 @@
             }
         }
     };
-
-
 
 
 </script>
