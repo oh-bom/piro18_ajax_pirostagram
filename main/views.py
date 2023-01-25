@@ -64,3 +64,15 @@ def comment_create(request):
     
     return JsonResponse({'id':post_id, "comment":post_comment})
     
+
+@csrf_exempt
+def comment_delete(request):
+    req=json.loads(request.body)
+    post_id=req['id']
+    
+    post=Post.objects.get(id=post_id)
+    
+    post.comment=''
+    post.save()
+    
+    return JsonResponse({'id':post_id})

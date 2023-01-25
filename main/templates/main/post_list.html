@@ -9,7 +9,10 @@
                 <button class="post_like" onclick="onClickLike({{post.id}})">❤ {{post.like}}</button>
                 <br><br>
 
-                <div class="post_comment">🐬{{post.comment}}</div>
+                <div class="comment" style="display:flex;">
+                    <div class="post_comment">🐬{{post.comment}}</div>
+                    <button class="post_content_delete" onclick="onClickCommentDelete({{post.id}})">✖</button>
+                </div>
                 {% comment %} <table>
                     <tbody class="post_comment">
                         <tr>
@@ -93,6 +96,32 @@
             }
         }
     };
+
+    //댓글 삭제
+    const requestCommentDelete=new XMLHttpRequest();
+    const onClickCommentDelete=(id)=>{
+        const url='/comment_delete';
+        requestCommentDelete.open('POST',url,true)
+        requestCommentDelete.setRequestHeader(
+            'Content-Type',
+            'application/x-www-form-urlencded'
+        );
+        requestCommentDelete.send(JSON.stringify({id:id}));
+        
+    };
+
+    requestCommentDelete.onreadystatechange=()=>{
+        if(requestCommentDelete.readyState===XMLHttpRequest.DONE){
+            if(requestCommentDelete.status<400){
+                const {id}=JSON.parse(requestCommentDelete.response);
+                let element=document.querySelector(`.post_id_${id} .post_comment`);
+                element.innerHTML=" ";
+
+            }
+        }
+    };
+
+
 
 
 </script>
