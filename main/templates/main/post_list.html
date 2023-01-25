@@ -1,0 +1,101 @@
+
+{%block content%}
+    <div class="main_container">
+        {% for post in posts %}
+            <div class="post_container post_id_{{post.id}}">
+                <div class="post_title">title:{{post.title}}</div>
+                <div class="post_content">content:{{post.content}}</div>
+                <br>
+                <button class="post_like" onclick="onClickLike({{post.id}})">❤ {{post.like}}</button>
+                <br><br>
+
+                <div class="post_comment">🐬{{post.comment}}</div>
+                {% comment %} <table>
+                    <tbody class="post_comment">
+                        <tr>
+                            <td>🐬{{post.comment}}</td>
+                        </tr>
+                    </tbody> 
+                </table> {% endcomment %}
+                <br>
+                <textarea class="post_comment_insert"></textarea>
+                <button class="submit" onclick="onClickCommentSave({{post.id}},'')">🚀</button>
+                <br>
+            
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+        
+
+<script>
+    const strip = (string) => {
+        return string.replace(/^\s+|\s+$/g, "");
+    };
+
+    //좋아요 기능
+    const requestLike=new XMLHttpRequest();
+
+    const onClickLike=(id)=>{
+        const url="/like_ajax";
+        requestLike.open("POST",url,true)
+        requestLike.setRequestHeader(
+            'Content-Type',
+            'applicaton/x-www-form-urlencoded'
+        );
+        requestLike.send(JSON.stringify({id:id}));
+    };
+
+    requestLike.onreadystatechange=()=>{
+        if(requestLike.readyState===XMLHttpRequest.DONE){
+            if(requestLike.status<400){
+                const {id}=JSON.parse(requestLike.response);
+                const element=document.querySelector(`.post_id_${id} .post_like`);
+                const originHTML=element.innerHTML;
+                console.log(originHTML)
+
+                const [logo, num]=originHTML.split(" ");
+                const count=Number(num)+1;
+                console.log(count);
+
+                element.innerHTML=`${logo} ${count}`;
+            }
+        }
+      };
+
+    // 댓글 추가
+    const requestCommentCreate=new XMLHttpRequest();
+    const onClickCommentSave=(id,comment)=>{
+        const url='/comment_create';
+        var comment=document.querySelector(`.post_id_${id} .post_comment_insert`).value;
+        requestCommentCreate.open('POST',url,true)
+        requestCommentCreate.setRequestHeader(
+            'Content-Type',
+            'applicaton/x-www-form-urlencoded'
+        );
+        requestCommentCreate.send(JSON.stringify({id:id,comment:comment}));
+    };
+
+    requestCommentCreate.onreadystatechange=()=>{
+        if(requestLike.readyState===XMLHttpRequest.DONE){
+            if(requestCommentCreate.status<400){
+                const {id,comment}=JSON.parse(requestCommentCreate.response);
+                let element=document.querySelector(`.post_id_${id} .post_comment`);
+                
+                element.innerHTML="👻 "+`${comment}`;
+                
+                /*let tr=document.createElement("tr");
+                let newComment=document.createElement('td');
+                newComment.innerHTML=`${comment}`;
+                tr.append(newComment);
+                console.log(newComment);
+                comment_list.append(newComment);*/
+            }
+        }
+    };
+
+
+</script>
+        
+
+
